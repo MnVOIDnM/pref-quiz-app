@@ -7,7 +7,7 @@ const Title = ({ setIsStarted }) => {
         都道府県クイズ
       </Heading>
       <Box boxSize="sm">
-        <Image src="src/assets/japan/日本列島.png" alt="japan" />
+        <Image src="public/img/japan/日本列島.png" alt="japan" />
       </Box>
       <Button
         size="lg"

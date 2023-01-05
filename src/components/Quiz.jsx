@@ -1,5 +1,5 @@
 import { Button, Heading, HStack, VStack, Image, Box } from "@chakra-ui/react";
-import { prefData } from "../assets/prefData";
+import { prefData } from "../prefData";
 import { useState } from "react";
 import Stopwatch from "./Stopwatch";
 import { useStopwatch } from "react-timer-hook";
