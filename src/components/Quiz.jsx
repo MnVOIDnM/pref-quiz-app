@@ -44,13 +44,11 @@ const Quiz = ({ setIsStarted }) => {
       updateQuiz();
       setTimeout(() => {
         setIsCorrectAnswer((prev) => !prev);
-        console.log("timer working");
       }, 400);
     } else {
       setIsWrongAnswer((prev) => !prev);
       setTimeout(() => {
         setIsWrongAnswer((prev) => !prev);
-        console.log("timer working");
       }, 800);
     }
   };
