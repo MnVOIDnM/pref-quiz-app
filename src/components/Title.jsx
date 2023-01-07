@@ -1,6 +1,7 @@
 import { Button, Heading, VStack, Image, Box } from "@chakra-ui/react";
 
-const Title = ({ setIsStarted }) => {
+const Title = ({ countryMode, singleMode }) => {
+
   return (
     <VStack>
       <Heading padding={3} margin={3} size="2xl">
@@ -12,10 +13,16 @@ const Title = ({ setIsStarted }) => {
       <Button
         size="lg"
         width="30%"
-        colorScheme="twitter"
-        onClick={() => setIsStarted((flag) => !flag)}
+        onClick={singleMode}
       >
-        スタート
+        単体モード
+      </Button>
+      <Button
+        size="lg"
+        width="30%"
+        onClick={countryMode}
+      >
+        日本全体モード
       </Button>
     </VStack>
   );

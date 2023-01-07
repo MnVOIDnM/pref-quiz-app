@@ -5,13 +5,22 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
+  const [quizType, setQuizType] = useState("")
+  const singleMode = () => {
+    setIsStarted(flag => !flag)
+    setQuizType("imgSingle")
+  }
+  const countryMode = () => {
+    setIsStarted(flag => !flag)
+    setQuizType("imgCountry")
+  }
 
   return (
     <ChakraProvider>
       {isStarted ? (
-        <Quiz setIsStarted={setIsStarted} />
+        <Quiz setIsStarted={setIsStarted} quizType={quizType} />
       ) : (
-        <Title setIsStarted={setIsStarted} />
+        <Title countryMode={countryMode} singleMode={singleMode} />
       )}
     </ChakraProvider>
   );

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Stopwatch from "./Stopwatch";
 import { useStopwatch } from "react-timer-hook";
 
-const Quiz = ({ setIsStarted }) => {
+const Quiz = ({ setIsStarted, quizType }) => {
   const shuffle = ([...arr]) => {
     for (let i = arr.length - 1; i >= 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -21,9 +21,9 @@ const Quiz = ({ setIsStarted }) => {
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
 
   const initQuiz = [];
+  const shuffledData = shuffle(prefData);
   for (let i = 0; i < quizSize; i++) {
-    const shuffledData = shuffle(prefData);
-    const choices = shuffledData.slice(0, 4);
+    const choices = shuffledData.slice(i * 4, (i * 4) + 4);
     initQuiz.push(choices);
   }
   const [quizQueue, setQuizQueue] = useState(initQuiz);
@@ -73,7 +73,7 @@ const Quiz = ({ setIsStarted }) => {
       </VStack>
       <VStack>
         <Box boxSize="md" margin={2}>
-          <Image src={quizQueue[0][answer].imgSingle} />
+          <Image src={quizQueue[0][answer][quizType]} />
         </Box>
         <HStack>
           {quizQueue[0].map((choice) => (
@@ -95,7 +95,7 @@ const Quiz = ({ setIsStarted }) => {
           margin="6"
           size="lg"
           colorScheme="blue"
-          onClick={() => setIsStarted((isStarted) => !isStarted)}
+          onClick={() => setIsStarted((flag) => !flag)}
         >
           ホーム画面に戻る
         </Button>
