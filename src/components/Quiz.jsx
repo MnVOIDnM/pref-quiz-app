@@ -23,7 +23,7 @@ const Quiz = ({ setIsStarted, quizType }) => {
   const initQuiz = [];
   const shuffledData = shuffle(prefData);
   for (let i = 0; i < quizSize; i++) {
-    const choices = shuffledData.slice(i * 4, (i * 4) + 4);
+    const choices = shuffledData.slice(i * 4, i * 4 + 4);
     initQuiz.push(choices);
   }
   const [quizQueue, setQuizQueue] = useState(initQuiz);
@@ -55,51 +55,54 @@ const Quiz = ({ setIsStarted, quizType }) => {
 
   return (
     <HStack>
-      <VStack>
-        <Stopwatch useStopwatchState={{ seconds, minutes }} />
-        <Heading>{`残り${quizQueue.length}問`}</Heading>
-        <Box h="10px">
-          {isWrongAnswer && (
-            <Heading color="blue" padding={10} fontSize="100px">
-              X
-            </Heading>
-          )}
-          {isCorrectAnswer && (
-            <Heading color="red" padding={10} fontSize="100px">
-              ○
-            </Heading>
-          )}
-        </Box>
-      </VStack>
-      <VStack>
-        <Box boxSize="md" margin={2}>
-          <Image src={quizQueue[0][answer][quizType]} />
-        </Box>
-        <HStack>
-          {quizQueue[0].map((choice) => (
+      <Box m={8}>
+        <VStack>
+          <Stopwatch useStopwatchState={{ seconds, minutes }} />
+          <Heading>{`残り${quizQueue.length}問`}</Heading>
+          <Box h="10px">
+            {isWrongAnswer && (
+              <Heading color="blue" padding={10} fontSize="100px">
+                X
+              </Heading>
+            )}
+            {isCorrectAnswer && (
+              <Heading color="red" padding={10} fontSize="100px">
+                ○
+              </Heading>
+            )}
+          </Box>
+          {!isRunning && (
             <Button
-              fontSize="2xl"
-              width="130px"
-              padding={8}
-              key={choice.id}
-              isDisabled={isWrongAnswer}
-              onClick={() => judge(choice.name)}
+              margin="6"
+              size="lg"
+              colorScheme="blue"
+              onClick={() => setIsStarted((flag) => !flag)}
             >
-              {choice.name}
+              ホーム画面に戻る
             </Button>
-          ))}
-        </HStack>
+          )}
+        </VStack>
+      </Box>
+      <VStack>
+        <Box boxSize={["sm", "md", "lg", "xl"]}>
+          <Box margin={1}>
+            <Image src={quizQueue[0][answer][quizType]} />
+          </Box>
+          <HStack>
+            {quizQueue[0].map((choice) => (
+              <Button
+                fontSize="2xl"
+                padding={8}
+                key={choice.id}
+                isDisabled={isWrongAnswer}
+                onClick={() => judge(choice.name)}
+              >
+                {choice.name}
+              </Button>
+            ))}
+          </HStack>
+        </Box>
       </VStack>
-      {!isRunning && (
-        <Button
-          margin="6"
-          size="lg"
-          colorScheme="blue"
-          onClick={() => setIsStarted((flag) => !flag)}
-        >
-          ホーム画面に戻る
-        </Button>
-      )}
     </HStack>
   );
 };

@@ -1,6 +1,7 @@
 import Title from "./Title";
 import Quiz from "./Quiz";
 import { useState } from "react";
+import { Center } from "@chakra-ui/react";
 import { ChakraProvider } from "@chakra-ui/react";
 
 function App() {
@@ -18,7 +19,9 @@ function App() {
   return (
     <ChakraProvider>
       {isStarted ? (
-        <Quiz setIsStarted={setIsStarted} quizType={quizType} />
+        <Center>
+          <Quiz setIsStarted={setIsStarted} quizType={quizType} />
+        </Center>
       ) : (
         <Title countryMode={countryMode} singleMode={singleMode} />
       )}
