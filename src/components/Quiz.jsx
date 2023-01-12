@@ -55,7 +55,7 @@ const Quiz = ({ setIsStarted, quizType }) => {
 
   return (
     <HStack>
-      <Box m={8}>
+      <Box m={8} boxSize="sm">
         <VStack>
           <Stopwatch useStopwatchState={{ seconds, minutes }} />
           <Heading>{`残り${quizQueue.length}問`}</Heading>
