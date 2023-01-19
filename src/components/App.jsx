@@ -5,26 +5,24 @@ import { Center } from "@chakra-ui/react";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
-  const [quizType, setQuizType] = useState("")
+  const [quizType, setQuizType] = useState("");
   const singleMode = () => {
-    setIsStarted(flag => !flag)
-    setQuizType("imgSingle")
-  }
+    setIsStarted((flag) => !flag);
+    setQuizType("imgSingle");
+  };
   const countryMode = () => {
-    setIsStarted(flag => !flag)
-    setQuizType("imgCountry")
-  }
+    setIsStarted((flag) => !flag);
+    setQuizType("imgCountry");
+  };
 
   return (
-    <>
+    <Center>
       {isStarted ? (
-        <Center>
-          <Quiz setIsStarted={setIsStarted} quizType={quizType} />
-        </Center>
+        <Quiz setIsStarted={setIsStarted} quizType={quizType} />
       ) : (
         <Title countryMode={countryMode} singleMode={singleMode} />
       )}
-    </>
+    </Center>
   );
 }
 
