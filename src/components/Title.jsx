@@ -1,29 +1,85 @@
-import { Button, Heading, VStack, Image, Box } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonGroup,
+  Heading,
+  VStack,
+  HStack,
+  Image,
+  Box,
+} from "@chakra-ui/react";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+} from "@chakra-ui/react";
 
-const Title = ({ countryMode, singleMode }) => {
-
+const Title = ({
+  countryMode10,
+  countryMode47,
+  singleMode10,
+  singleMode47,
+}) => {
   return (
     <VStack>
-      <Heading padding={3} margin={3} size="2xl">
-        都道府県クイズ
-      </Heading>
-      <Box boxSize="sm">
+      <Box boxSize="md">
         <Image src="img/japan/日本列島.png" alt="japan" />
       </Box>
-      <Button
-        size="lg"
-        width="30%"
-        onClick={singleMode}
-      >
-        単体モード
-      </Button>
-      <Button
-        size="lg"
-        width="30%"
-        onClick={countryMode}
-      >
-        日本全体モード
-      </Button>
+      <HStack>
+        <Box width="50%">
+          <Popover>
+            <PopoverTrigger>
+              <Box>
+                <Image
+                  w="20"
+                  src="img/imgSingle/hokkaidoSingle.jpg"
+                  alt="single mode"
+                />
+                <Heading size="md">単体モード</Heading>
+              </Box>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader>1つの都道府県だけが表示されるよ</PopoverHeader>
+              <PopoverBody>
+                <ButtonGroup gap="2">
+                  <Button onClick={singleMode10}>１０問</Button>
+                  <Button onClick={singleMode47}>４７問</Button>
+                </ButtonGroup>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+        </Box>
+        <Box width="50%">
+          <Popover>
+            <PopoverTrigger>
+              <Box>
+                <Image
+                  w="20"
+                  src="img/imgCountry/hokkaidoCountry.jpg"
+                  alt="country mode"
+                />
+                <Heading size="md">全体モード</Heading>
+              </Box>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader>日本全体が表示されるよ</PopoverHeader>
+              <PopoverBody>
+                <ButtonGroup gap="2">
+                  <Button onClick={countryMode10}>１０問</Button>
+                  <Button onClick={countryMode47}>４７問</Button>
+                </ButtonGroup>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+        </Box>
+      </HStack>
     </VStack>
   );
 };

@@ -4,7 +4,7 @@ const Stopwatch = ({ useStopwatchState }) => {
   const { seconds, minutes } = useStopwatchState;
 
   return (
-    <Heading p={8} size="4xl">
+    <Heading fontFamily="monospace" p={8} size="4xl">
       {`00${minutes}`.slice(-2)}:{`00${seconds}`.slice(-2)}
     </Heading>
   );
