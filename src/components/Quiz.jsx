@@ -1,110 +1,108 @@
-import { Button, Heading, HStack, VStack, Image, Box } from "@chakra-ui/react";
-import { prefData } from "../prefData";
-import { useState } from "react";
+import {
+  Button,
+  ButtonGroup,
+  Heading,
+  HStack,
+  VStack,
+  Image,
+  Box,
+} from "@chakra-ui/react";
+import React, { useState } from "react";
 import Stopwatch from "./Stopwatch";
 import { useStopwatch } from "react-timer-hook";
 
-const Quiz = ({ setIsStarted, quizType }) => {
-  const shuffle = ([...arr]) => {
-    for (let i = arr.length - 1; i >= 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  };
+const Quiz = ({
+  setIsStarted,
+  quizType,
+  quizQueue,
+  answerRow,
+  quizSizeState,
+}) => {
+  const [quizSize, setQuizSize] = quizSizeState;
   const { seconds, minutes, pause, isRunning } = useStopwatch({
     autoStart: true,
   });
-  const [quizSize, setQuizSize] = useState(10);
-  const [answer, setAnswer] = useState(Math.floor(Math.random() * 4));
-  const [isWrongAnswer, setIsWrongAnswer] = useState(false);
-  const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
+  const [isWrong, setIsWrong] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [fixedQuizSize, setfixedQuizSize] = useState(quizSize);
 
-  const initQuiz = [];
-  const shuffledData = shuffle(prefData);
-  for (let i = 0; i < quizSize; i++) {
-    const choices = shuffledData.slice(i * 4, i * 4 + 4);
-    initQuiz.push(choices);
-  }
-  const [quizQueue, setQuizQueue] = useState(initQuiz);
+  const counter = fixedQuizSize - quizSize;
 
   const updateQuiz = () => {
-    if (quizQueue.length > 1) {
-      setAnswer(() => Math.floor(Math.random() * 4));
-      setQuizQueue(quizQueue.filter((quiz, index) => index !== 0));
-    } else if ((quizQueue.length = 1)) {
+    if (quizSize > 1) {
+      setQuizSize((prev) => --prev);
+    } else if (quizSize == 1) {
       pause();
     } else {
       throw new Error("error");
     }
   };
   const judge = (selectedChoice) => {
-    if (selectedChoice == quizQueue[0][answer].name) {
-      setIsCorrectAnswer((prev) => !prev);
-      updateQuiz();
+    if (selectedChoice == answerRow[counter].name) {
+      setIsCorrect((prev) => !prev);
       setTimeout(() => {
-        setIsCorrectAnswer((prev) => !prev);
+        setIsCorrect((prev) => !prev);
       }, 400);
+      updateQuiz();
     } else {
-      setIsWrongAnswer((prev) => !prev);
+      setIsWrong((prev) => !prev);
       setTimeout(() => {
-        setIsWrongAnswer((prev) => !prev);
+        setIsWrong((prev) => !prev);
       }, 800);
     }
   };
 
   return (
     <HStack>
-      <Box m={8} boxSize="sm">
-        <VStack>
-          <Stopwatch useStopwatchState={{ seconds, minutes }} />
-          <Heading>{`残り${quizQueue.length}問`}</Heading>
-          <Box h="10px">
-            {isWrongAnswer && (
-              <Heading color="blue" padding={10} fontSize="100px">
-                X
-              </Heading>
-            )}
-            {isCorrectAnswer && (
-              <Heading color="red" padding={10} fontSize="100px">
-                ○
-              </Heading>
-            )}
-          </Box>
-          {!isRunning && (
-            <Button
-              margin="6"
-              size="lg"
-              colorScheme="blue"
-              onClick={() => setIsStarted((flag) => !flag)}
-            >
-              ホーム画面に戻る
-            </Button>
-          )}
-        </VStack>
-      </Box>
       <VStack>
-        <Box boxSize={["sm", "md", "lg", "xl"]}>
-          <Box margin={1}>
-            <Image src={quizQueue[0][answer][quizType]} />
+        <Button
+          m={5}
+          size="lg"
+          colorScheme="blue"
+          onClick={() => setIsStarted((flag) => !flag)}
+        >
+          ホーム画面に戻る
+        </Button>
+        <Box>
+          <Stopwatch useStopwatchState={{ seconds, minutes }} />
+        </Box>
+        <Heading size="2xl">{`${counter + 1}/${fixedQuizSize}`}</Heading>
+        <Box h="150px">
+          {isWrong && (
+            <Heading color="blue" fontSize="100px">
+              X
+            </Heading>
+          )}
+          {isCorrect && (
+            <Heading color="red" fontSize="100px">
+              ○
+            </Heading>
+          )}
+        </Box>
+      </VStack>
+      <VStack>
+        <Box>
+          <Box boxSize="lg">
+            <Image src={answerRow[counter][quizType]} />
           </Box>
-          <HStack>
-            {quizQueue[0].map((choice) => (
-              <Button
-                fontSize="2xl"
-                padding={8}
-                key={choice.id}
-                isDisabled={isWrongAnswer}
-                onClick={() => judge(choice.name)}
-              >
-                {choice.name}
-              </Button>
-            ))}
+          <HStack m={3}>
+            <ButtonGroup gap="2">
+              {quizQueue[counter].map((choice) => (
+                <Button
+                  size="lg"
+                  w="110px"
+                  key={choice.id}
+                  isDisabled={isWrong}
+                  onClick={() => judge(choice.name)}
+                >
+                  {choice.name}
+                </Button>
+              ))}
+            </ButtonGroup>
           </HStack>
         </Box>
       </VStack>
     </HStack>
   );
 };
-
 export default Quiz;
