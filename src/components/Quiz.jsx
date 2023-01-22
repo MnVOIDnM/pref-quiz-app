@@ -1,108 +1,78 @@
-import {
-  Button,
-  ButtonGroup,
-  Heading,
-  HStack,
-  VStack,
-  Image,
-  Box,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
+import { HStack, VStack, Box } from "@chakra-ui/react";
+import React, { useState, useCallback } from "react";
 import Stopwatch from "./Stopwatch";
 import { useStopwatch } from "react-timer-hook";
+import HomeButton from "./HomeButton";
+import DisplayJudge from "./DisplayJudge";
+import DisplayRestQuiz from "./DisplayRestQuiz";
+import QuizChoices from "./QuizChoices";
+import QuizImage from "./QuizImage";
 
-const Quiz = ({
-  setIsStarted,
-  quizType,
-  quizQueue,
-  answerRow,
-  quizSizeState,
-}) => {
-  const [quizSize, setQuizSize] = quizSizeState;
+const Quiz = React.memo(({ setIsStarted, quizQueueState, quizState }) => {
+  const [quizQueue, setQuizQueue] = quizQueueState;
   const { seconds, minutes, pause, isRunning } = useStopwatch({
     autoStart: true,
   });
   const [isWrong, setIsWrong] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [fixedQuizSize, setfixedQuizSize] = useState(quizSize);
+  const [fixedQuizSize] = useState(quizState.quizSize);
+  const [restQuiz, setRestQuiz] = useState(quizState.quizSize);
 
-  const counter = fixedQuizSize - quizSize;
+  const counter = fixedQuizSize - restQuiz;
 
   const updateQuiz = () => {
-    if (quizSize > 1) {
-      setQuizSize((prev) => --prev);
-    } else if (quizSize == 1) {
+    if (restQuiz > 1) {
+      setRestQuiz((prev) => prev - 1);
+    } else if (restQuiz == 1) {
       pause();
     } else {
       throw new Error("error");
     }
   };
-  const judge = (selectedChoice) => {
-    if (selectedChoice == answerRow[counter].name) {
-      setIsCorrect((prev) => !prev);
-      setTimeout(() => {
+  const judge = useCallback(
+    (selectedChoice) => {
+      if (selectedChoice == quizQueue.answer[counter].name) {
         setIsCorrect((prev) => !prev);
-      }, 400);
-      updateQuiz();
-    } else {
-      setIsWrong((prev) => !prev);
-      setTimeout(() => {
+        setTimeout(() => {
+          setIsCorrect((prev) => !prev);
+        }, 400);
+        updateQuiz();
+      } else {
         setIsWrong((prev) => !prev);
-      }, 800);
-    }
-  };
+        setTimeout(() => {
+          setIsWrong((prev) => !prev);
+        }, 800);
+      }
+    },
+    [isCorrect, isWrong]
+  );
 
   return (
     <HStack>
       <VStack>
-        <Button
-          m={5}
-          size="lg"
-          colorScheme="blue"
-          onClick={() => setIsStarted((flag) => !flag)}
-        >
-          ホーム画面に戻る
-        </Button>
+        <HomeButton setIsStarted={setIsStarted} setQuizQueue={setQuizQueue} />
         <Box>
           <Stopwatch useStopwatchState={{ seconds, minutes }} />
         </Box>
-        <Heading size="2xl">{`${counter + 1}/${fixedQuizSize}`}</Heading>
-        <Box h="150px">
-          {isWrong && (
-            <Heading color="blue" fontSize="100px">
-              X
-            </Heading>
-          )}
-          {isCorrect && (
-            <Heading color="red" fontSize="100px">
-              ○
-            </Heading>
-          )}
-        </Box>
+        <DisplayRestQuiz counter={counter} fixedQuizSize={fixedQuizSize} />
+        <DisplayJudge isCorrect={isCorrect} isWrong={isWrong} />
       </VStack>
       <VStack>
         <Box>
-          <Box boxSize="lg">
-            <Image src={answerRow[counter][quizType]} />
-          </Box>
-          <HStack m={3}>
-            <ButtonGroup gap="2">
-              {quizQueue[counter].map((choice) => (
-                <Button
-                  size="lg"
-                  w="110px"
-                  key={choice.id}
-                  isDisabled={isWrong}
-                  onClick={() => judge(choice.name)}
-                >
-                  {choice.name}
-                </Button>
-              ))}
-            </ButtonGroup>
-          </HStack>
+          <QuizImage
+            quizQueue={quizQueue}
+            counter={counter}
+            quizState={quizState}
+          />
+          <QuizChoices
+            quizQueue={quizQueue}
+            judge={judge}
+            isWrong={isWrong}
+            counter={counter}
+          />
         </Box>
       </VStack>
     </HStack>
   );
-};
+});
 export default Quiz;

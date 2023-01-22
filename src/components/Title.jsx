@@ -16,13 +16,21 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/react";
+import React from "react";
 
-const Title = ({
-  countryMode10,
-  countryMode47,
-  singleMode10,
-  singleMode47,
-}) => {
+const Title = React.memo(({ dispatch }) => {
+  const singleMode10 = () => {
+    dispatch("single10");
+  };
+  const singleMode47 = () => {
+    dispatch("single47");
+  };
+  const countryMode10 = () => {
+    dispatch("country10");
+  };
+  const countryMode47 = () => {
+    dispatch("country47");
+  };
   return (
     <VStack>
       <Box boxSize="md">
@@ -82,6 +90,6 @@ const Title = ({
       </HStack>
     </VStack>
   );
-};
+});
 
 export default Title;
