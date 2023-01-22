@@ -17,6 +17,9 @@ import {
   PopoverCloseButton,
 } from "@chakra-ui/react";
 import React from "react";
+import coverImage from "../images/日本列島.png";
+import singleImage from "../images/hokkaidoSingle.jpg";
+import countryImage from "../images/hokkaidoCountry.jpg";
 
 const Title = React.memo(({ dispatch }) => {
   const singleMode10 = () => {
@@ -34,18 +37,14 @@ const Title = React.memo(({ dispatch }) => {
   return (
     <VStack>
       <Box boxSize="md">
-        <Image src="img/japan/日本列島.png" alt="japan" />
+        <Image src={coverImage} alt="japan" />
       </Box>
       <HStack>
         <Box width="50%">
           <Popover>
             <PopoverTrigger>
               <Box>
-                <Image
-                  w="20"
-                  src="img/imgSingle/hokkaidoSingle.jpg"
-                  alt="single mode"
-                />
+                <Image w="20" src={singleImage} alt="single mode" />
                 <Heading size="md">単体モード</Heading>
               </Box>
             </PopoverTrigger>
@@ -66,11 +65,7 @@ const Title = React.memo(({ dispatch }) => {
           <Popover>
             <PopoverTrigger>
               <Box>
-                <Image
-                  w="20"
-                  src="img/imgCountry/hokkaidoCountry.jpg"
-                  alt="country mode"
-                />
+                <Image w="20" src={countryImage} alt="country mode" />
                 <Heading size="md">全体モード</Heading>
               </Box>
             </PopoverTrigger>
