@@ -11,7 +11,7 @@ const HomeButton = React.memo(({ setIsStarted, setQuizQueue }) => {
         colorScheme="blue"
         onClick={() => {
           setIsStarted((flag) => !flag);
-          setQuizQueue(createQuiz());
+          setQuizQueue(createQuiz())
         }}
       >
         ホーム画面に戻る

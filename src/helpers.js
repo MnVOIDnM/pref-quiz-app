@@ -25,11 +25,12 @@ export const createQuiz = () => {
     });
     choices.push(answer);
     quizChoices.push(shuffle(choices));
+    // quizChoices.push(choices);
   }
   const queue = {
     choices: quizChoices,
     answer: answerRow,
   };
-  console.log("createQuiz excuted");
+  // console.log("Quiz is created");
   return queue;
 };

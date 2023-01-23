@@ -6,6 +6,9 @@ import {
   HStack,
   Image,
   Box,
+  Switch,
+  FormLabel,
+  FormControl,
 } from "@chakra-ui/react";
 import {
   Popover,
@@ -14,14 +17,13 @@ import {
   PopoverHeader,
   PopoverBody,
   PopoverArrow,
-  PopoverCloseButton,
 } from "@chakra-ui/react";
-import React from "react";
-import coverImage from "../images/日本列島.png";
-import singleImage from "../images/hokkaidoSingle.jpg";
-import countryImage from "../images/hokkaidoCountry.jpg";
+import React, { useState } from "react";
+import coverImage from "../images/japanIllust.png";
+import singleImage from "../images/hokkaidoSingle.png";
+import countryImage from "../images/hokkaidoCountry.png";
 
-const Title = React.memo(({ dispatch }) => {
+const Title = React.memo(({ dispatch, isKanaState }) => {
   const singleMode10 = () => {
     dispatch("single10");
   };
@@ -34,23 +36,31 @@ const Title = React.memo(({ dispatch }) => {
   const countryMode47 = () => {
     dispatch("country47");
   };
+  const [isKana, setIsKana] = isKanaState;
   return (
     <VStack>
       <Box boxSize="md">
         <Image src={coverImage} alt="japan" />
       </Box>
       <HStack>
+        <FormControl>
+          <FormLabel htmlFor="kanaMode">ひらがな</FormLabel>
+          <Switch
+            id="kanaMode"
+            isChecked={isKana}
+            onChange={() => setIsKana((prev) => !prev)}
+          />
+        </FormControl>
         <Box width="50%">
           <Popover>
             <PopoverTrigger>
               <Box>
-                <Image w="20" src={singleImage} alt="single mode" />
+                <Image w="200px" src={singleImage} alt="single mode" />
                 <Heading size="md">単体モード</Heading>
               </Box>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
-              <PopoverCloseButton />
               <PopoverHeader>1つの都道府県だけが表示されるよ</PopoverHeader>
               <PopoverBody>
                 <ButtonGroup gap="2">
@@ -65,13 +75,12 @@ const Title = React.memo(({ dispatch }) => {
           <Popover>
             <PopoverTrigger>
               <Box>
-                <Image w="20" src={countryImage} alt="country mode" />
+                <Image w="200px" src={countryImage} alt="country mode" />
                 <Heading size="md">全体モード</Heading>
               </Box>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
-              <PopoverCloseButton />
               <PopoverHeader>日本全体が表示されるよ</PopoverHeader>
               <PopoverBody>
                 <ButtonGroup gap="2">

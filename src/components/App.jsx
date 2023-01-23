@@ -1,11 +1,12 @@
 import Title from "./Title";
 import Quiz from "./Quiz";
-import { useState, useReducer } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { Center } from "@chakra-ui/react";
 import { createQuiz } from "../helpers";
 
 function App() {
   const [isStarted, setIsStarted] = useState(false);
+  const [isKana, setIsKana] = useState(false);
   const initQuizState = {
     quizType: "",
     quizSize: 0,
@@ -27,7 +28,10 @@ function App() {
   };
   const [quizState, dispatch] = useReducer(modeReducer, initQuizState);
 
-  const [quizQueue, setQuizQueue] = useState(createQuiz());
+  const [quizQueue, setQuizQueue] = useState();
+  useEffect(() => {
+    setQuizQueue(createQuiz());
+  }, []);
 
   return (
     <Center h="600px" w="800px">
@@ -36,9 +40,10 @@ function App() {
           setIsStarted={setIsStarted}
           quizQueueState={[quizQueue, setQuizQueue]}
           quizState={quizState}
+          isKana={isKana}
         />
       ) : (
-        <Title dispatch={dispatch} />
+        <Title dispatch={dispatch} isKanaState={[isKana, setIsKana]} />
       )}
     </Center>
   );
