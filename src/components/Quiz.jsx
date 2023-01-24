@@ -10,7 +10,7 @@ import QuizImage from "./QuizImage";
 import ResultModal from "./ResultModal";
 
 const Quiz = React.memo(
-  ({ setIsStarted, quizQueueState, quizState, isKana }) => {
+  ({ setIsStarted, quizQueueState, quizState, kanaType }) => {
     const [quizQueue, setQuizQueue] = quizQueueState;
     const { seconds, minutes, pause, isRunning } = useStopwatch({
       autoStart: true,
@@ -34,21 +34,17 @@ const Quiz = React.memo(
       }
     };
     const judge = (select) => {
-      if (
-        select == isKana
-          ? quizQueue.answer[counter].nameKana
-          : quizQueue.answer[counter].name
-      ) {
+      if (select == quizQueue.answer[counter][kanaType]) {
         setIsCorrect((prev) => !prev);
         setTimeout(() => {
           setIsCorrect((prev) => !prev);
-        }, 2000);
+        }, 400);
         updateQuiz();
       } else {
         setIsWrong((prev) => !prev);
         setTimeout(() => {
           setIsWrong((prev) => !prev);
-        }, 1000);
+        }, 800);
       }
     };
 
@@ -81,7 +77,7 @@ const Quiz = React.memo(
               judge={judge}
               isWrong={isWrong}
               counter={counter}
-              isKana={isKana}
+              kanaType={kanaType}
             />
           </Box>
         </VStack>

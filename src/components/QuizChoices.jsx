@@ -2,7 +2,7 @@ import React from "react";
 import { Button, ButtonGroup, Box, HStack } from "@chakra-ui/react";
 
 const QuizChoices = React.memo(
-  ({ quizQueue, judge, isWrong, counter, isKana }) => {
+  ({ quizQueue, judge, isWrong, counter, kanaType }) => {
     return (
       <HStack m={3}>
         <Box>
@@ -13,9 +13,9 @@ const QuizChoices = React.memo(
                 w="110px"
                 key={choice.id}
                 isDisabled={isWrong}
-                onClick={() => judge(isKana ? choice.nameKana : choice.name)}
+                onClick={() => judge(choice[kanaType])}
               >
-                {isKana ? choice.nameKana : choice.name}
+                {choice[kanaType]}
                 {/* {console.log("choice btn rendered")} */}
               </Button>
             ))}

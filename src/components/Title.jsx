@@ -18,12 +18,12 @@ import {
   PopoverBody,
   PopoverArrow,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import coverImage from "../images/japanIllust.png";
 import singleImage from "../images/hokkaidoSingle.png";
 import countryImage from "../images/hokkaidoCountry.png";
 
-const Title = React.memo(({ dispatch, isKanaState }) => {
+const Title = React.memo(({ dispatch, isKanaState, setKanaType }) => {
   const singleMode10 = () => {
     dispatch("single10");
   };
@@ -48,7 +48,14 @@ const Title = React.memo(({ dispatch, isKanaState }) => {
           <Switch
             id="kanaMode"
             isChecked={isKana}
-            onChange={() => setIsKana((prev) => !prev)}
+            onChange={() => {
+              setIsKana((prev) => !prev);
+              if (isKana) {
+                setKanaType("name");
+              } else {
+                setKanaType("nameKana");
+              }
+            }}
           />
         </FormControl>
         <Box width="50%">

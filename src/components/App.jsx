@@ -7,6 +7,8 @@ import { createQuiz } from "../helpers";
 function App() {
   const [isStarted, setIsStarted] = useState(false);
   const [isKana, setIsKana] = useState(false);
+  const [kanaType, setKanaType] = useState("name");
+
   const initQuizState = {
     quizType: "",
     quizSize: 0,
@@ -40,10 +42,14 @@ function App() {
           setIsStarted={setIsStarted}
           quizQueueState={[quizQueue, setQuizQueue]}
           quizState={quizState}
-          isKana={isKana}
+          kanaType={kanaType}
         />
       ) : (
-        <Title dispatch={dispatch} isKanaState={[isKana, setIsKana]} />
+        <Title
+          dispatch={dispatch}
+          isKanaState={[isKana, setIsKana]}
+          setKanaType={setKanaType}
+        />
       )}
     </Center>
   );
