@@ -1,6 +1,4 @@
 import {
-  Button,
-  ButtonGroup,
   Heading,
   VStack,
   HStack,
@@ -10,42 +8,41 @@ import {
   FormLabel,
   FormControl,
 } from "@chakra-ui/react";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-} from "@chakra-ui/react";
 import React from "react";
 import coverImage from "../images/japanIllust.png";
-import singleImage from "../images/hokkaidoSingle.png";
-import countryImage from "../images/hokkaidoCountry.png";
+import ModeSelectButton from "./ModeSelectButton";
 
 const Title = React.memo(({ dispatch, isKanaState, setKanaType }) => {
-  const singleMode10 = () => {
-    dispatch("single10");
-  };
-  const singleMode47 = () => {
-    dispatch("single47");
-  };
-  const countryMode10 = () => {
-    dispatch("country10");
-  };
-  const countryMode47 = () => {
-    dispatch("country47");
-  };
   const [isKana, setIsKana] = isKanaState;
   return (
     <VStack>
       <Box boxSize="md">
+        <Heading
+          size="3xl"
+          align="center"
+          w="50%"
+          pos="absolute"
+          top="30%"
+          textShadow="1px 1px 0 yellow, -1px -1px 0 yellow,
+          -1px 1px 0 yellow, 1px -1px 0 yellow,
+          0px 1px 0 yellow,  0-1px 0 yellow,
+          -1px 0 0 yellow, 1px 0 0 yellow"
+          textColor="red.400"
+        >
+          都道府県クイズ
+        </Heading>
         <Image src={coverImage} alt="japan" />
       </Box>
       <HStack>
-        <FormControl>
-          <FormLabel htmlFor="kanaMode">ひらがな</FormLabel>
+        <FormControl align="center">
+          <FormLabel w="100%" htmlFor="kanaMode">
+            <Heading fontSize="lg" align="center">
+              ひらがな
+            </Heading>
+          </FormLabel>
           <Switch
+            size="lg"
+            colorScheme="green"
             id="kanaMode"
             isChecked={isKana}
             onChange={() => {
@@ -58,46 +55,7 @@ const Title = React.memo(({ dispatch, isKanaState, setKanaType }) => {
             }}
           />
         </FormControl>
-        <Box width="50%">
-          <Popover>
-            <PopoverTrigger>
-              <Box>
-                <Image w="200px" src={singleImage} alt="single mode" />
-                <Heading size="md">単体モード</Heading>
-              </Box>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverArrow />
-              <PopoverHeader>1つの都道府県だけが表示されるよ</PopoverHeader>
-              <PopoverBody>
-                <ButtonGroup gap="2">
-                  <Button onClick={singleMode10}>１０問</Button>
-                  <Button onClick={singleMode47}>４７問</Button>
-                </ButtonGroup>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
-        </Box>
-        <Box width="50%">
-          <Popover>
-            <PopoverTrigger>
-              <Box>
-                <Image w="200px" src={countryImage} alt="country mode" />
-                <Heading size="md">全体モード</Heading>
-              </Box>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverArrow />
-              <PopoverHeader>日本全体が表示されるよ</PopoverHeader>
-              <PopoverBody>
-                <ButtonGroup gap="2">
-                  <Button onClick={countryMode10}>１０問</Button>
-                  <Button onClick={countryMode47}>４７問</Button>
-                </ButtonGroup>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
-        </Box>
+        <ModeSelectButton dispatch={dispatch} />
       </HStack>
     </VStack>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState } from "react";
 import { HStack, VStack, Box, useDisclosure } from "@chakra-ui/react";
 import { useStopwatch } from "react-timer-hook";
 import Stopwatch from "./Stopwatch";
@@ -12,7 +12,7 @@ import ResultModal from "./ResultModal";
 const Quiz = React.memo(
   ({ setIsStarted, quizQueueState, quizState, kanaType }) => {
     const [quizQueue, setQuizQueue] = quizQueueState;
-    const { seconds, minutes, pause, isRunning } = useStopwatch({
+    const { seconds, minutes, pause } = useStopwatch({
       autoStart: true,
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -38,7 +38,7 @@ const Quiz = React.memo(
         setIsCorrect((prev) => !prev);
         setTimeout(() => {
           setIsCorrect((prev) => !prev);
-        }, 400);
+        }, 200);
         updateQuiz();
       } else {
         setIsWrong((prev) => !prev);
