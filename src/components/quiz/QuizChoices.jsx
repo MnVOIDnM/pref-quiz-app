@@ -1,16 +1,17 @@
 import React from "react";
-import { Button, ButtonGroup, Box } from "@chakra-ui/react";
+import { Button, ButtonGroup } from "@chakra-ui/react";
 
 const QuizChoices = React.memo(
   ({ quizQueue, judge, isWrong, counter, kanaType }) => {
     return (
       <>
-        <ButtonGroup>
+        <ButtonGroup w="100%" h="20%" display="flex" justifyContent="right">
           {quizQueue.choices[counter].map((choice) => (
             <Button
-              p={7}
-              w="122px"
-              fontSize="19px"
+              px={12}
+              py={8}
+              fontSize="1.7rem"
+              w="23%"
               key={choice.id}
               isDisabled={isWrong}
               onClick={() => judge(choice[kanaType])}

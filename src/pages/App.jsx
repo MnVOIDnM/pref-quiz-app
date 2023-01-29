@@ -36,7 +36,7 @@ function App() {
   }, []);
 
   return (
-    <Center h="600px" w="800px" m="0 auto">
+    <Center>
       {isStarted ? (
         <Quiz
           setIsStarted={setIsStarted}

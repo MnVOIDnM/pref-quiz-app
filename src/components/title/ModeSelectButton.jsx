@@ -13,8 +13,8 @@ import {
   ButtonGroup,
   Button,
 } from "@chakra-ui/react";
-import singleImage from "../images/hokkaidoSingle.png";
-import countryImage from "../images/hokkaidoCountry.png";
+import singleImage from "../../images/hokkaidoSingle.png";
+import countryImage from "../../images/hokkaidoCountry.png";
 
 const ModeSelectButton = React.memo(({ dispatch }) => {
   const singleMode10 = () => {
@@ -41,7 +41,7 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
               boxShadow="dark-lg"
               p={1}
             >
-              <Image w="80px" src={countryImage} alt="country mode" />
+              <Image w="80px" h="80px" src={countryImage} alt="country mode" />
               <Heading align="center" fontSize="sm">
                 かんたん
               </Heading>
@@ -69,7 +69,7 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
               boxShadow="dark-lg"
               p={1}
             >
-              <Image w="80px" src={singleImage} alt="single mode" />
+              <Image w="80px" h="80px" src={singleImage} alt="single mode" />
               <Heading align="center" fontSize="sm">
                 むずかしい
               </Heading>

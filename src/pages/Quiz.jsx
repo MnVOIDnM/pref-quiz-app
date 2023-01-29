@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { HStack, VStack, Box, useDisclosure } from "@chakra-ui/react";
+import { HStack, VStack, Box, useDisclosure, Spacer } from "@chakra-ui/react";
 import { useStopwatch } from "react-timer-hook";
-import Stopwatch from "./Stopwatch";
-import HomeButton from "./HomeButton";
-import DisplayJudge from "./DisplayJudge";
-import DisplayRestQuiz from "./DisplayRestQuiz";
-import QuizChoices from "./QuizChoices";
-import QuizImage from "./QuizImage";
-import ResultModal from "./ResultModal";
+import Stopwatch from "../components/quiz/Stopwatch";
+import HomeButton from "../components/quiz/HomeButton";
+import DisplayJudge from "../components/quiz/DisplayJudge";
+import DisplayRestQuiz from "../components/quiz/DisplayRestQuiz";
+import QuizChoices from "../components/quiz/QuizChoices";
+import QuizImage from "../components/quiz/QuizImage";
+import ResultModal from "../components/quiz/ResultModal";
 
 const Quiz = React.memo(
   ({ setIsStarted, quizQueueState, quizState, kanaType }) => {
@@ -49,15 +49,33 @@ const Quiz = React.memo(
     };
 
     return (
-      <HStack>
-        <VStack>
-          <HomeButton setIsStarted={setIsStarted} setQuizQueue={setQuizQueue} />
-          <Box>
+      <VStack maxW="100vh" maxh="95vh">
+        <HStack>
+          <VStack w="20%" h="85%" minW="160px">
+            <HomeButton
+              setIsStarted={setIsStarted}
+              setQuizQueue={setQuizQueue}
+            />
             <Stopwatch useStopwatchState={{ seconds, minutes }} />
-          </Box>
-          <DisplayRestQuiz counter={counter} fixedQuizSize={fixedQuizSize} />
-          <DisplayJudge isCorrect={isCorrect} isWrong={isWrong} />
-        </VStack>
+            <DisplayRestQuiz counter={counter} fixedQuizSize={fixedQuizSize} />
+            <Spacer />
+            <Box h="150px">
+              <DisplayJudge isCorrect={isCorrect} isWrong={isWrong} />
+            </Box>
+          </VStack>
+          <QuizImage
+            quizQueue={quizQueue}
+            counter={counter}
+            quizState={quizState}
+          />
+        </HStack>
+        <QuizChoices
+          quizQueue={quizQueue}
+          judge={judge}
+          isWrong={isWrong}
+          counter={counter}
+          kanaType={kanaType}
+        />
         {isOpen && (
           <ResultModal
             setIsStarted={setIsStarted}
@@ -65,23 +83,7 @@ const Quiz = React.memo(
             disclosure={{ isOpen, onOpen, onClose }}
           />
         )}
-        <VStack>
-          <Box>
-            <QuizImage
-              quizQueue={quizQueue}
-              counter={counter}
-              quizState={quizState}
-            />
-            <QuizChoices
-              quizQueue={quizQueue}
-              judge={judge}
-              isWrong={isWrong}
-              counter={counter}
-              kanaType={kanaType}
-            />
-          </Box>
-        </VStack>
-      </HStack>
+      </VStack>
     );
   }
 );

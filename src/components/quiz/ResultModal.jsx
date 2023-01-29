@@ -5,7 +5,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalBody,
-  Button,
 } from "@chakra-ui/react";
 import HomeButton from "./HomeButton";
 

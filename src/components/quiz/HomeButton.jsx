@@ -1,12 +1,10 @@
 import React from "react";
-import { Button, Box } from "@chakra-ui/react";
-import { createQuiz } from "../helpers";
+import { Button } from "@chakra-ui/react";
+import { createQuiz } from "../../helpers";
 
 const HomeButton = React.memo(({ setIsStarted, setQuizQueue }) => {
   return (
     <Button
-      m={5}
-      size="lg"
       colorScheme="blue"
       onClick={() => {
         setIsStarted((flag) => !flag);
