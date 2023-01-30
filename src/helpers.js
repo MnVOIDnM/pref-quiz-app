@@ -31,6 +31,5 @@ export const createQuiz = () => {
     choices: quizChoices,
     answer: answerRow,
   };
-  // console.log("Quiz is created");
   return queue;
 };

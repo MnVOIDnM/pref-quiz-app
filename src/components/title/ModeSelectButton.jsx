@@ -32,7 +32,7 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
   return (
     <>
       <Center p={1}>
-        <Popover>
+        <Popover placement="top">
           <PopoverTrigger>
             <Box
               align="center"
@@ -43,7 +43,7 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
             >
               <Image w="80px" h="80px" src={countryImage} alt="country mode" />
               <Heading align="center" fontSize="sm">
-                かんたん
+                全体モード
               </Heading>
             </Box>
           </PopoverTrigger>
@@ -60,7 +60,7 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
         </Popover>
       </Center>
       <Center p={1}>
-        <Popover>
+        <Popover placement="top">
           <PopoverTrigger>
             <Box
               align="center"
@@ -71,7 +71,7 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
             >
               <Image w="80px" h="80px" src={singleImage} alt="single mode" />
               <Heading align="center" fontSize="sm">
-                むずかしい
+                一部モード
               </Heading>
             </Box>
           </PopoverTrigger>

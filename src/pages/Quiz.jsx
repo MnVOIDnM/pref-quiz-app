@@ -8,11 +8,12 @@ import DisplayRestQuiz from "../components/quiz/DisplayRestQuiz";
 import QuizChoices from "../components/quiz/QuizChoices";
 import QuizImage from "../components/quiz/QuizImage";
 import ResultModal from "../components/quiz/ResultModal";
+import { createQuiz } from "../helpers";
 
 const Quiz = React.memo(
   ({ setIsStarted, quizQueueState, quizState, kanaType }) => {
     const [quizQueue, setQuizQueue] = quizQueueState;
-    const { seconds, minutes, pause } = useStopwatch({
+    const { seconds, minutes, pause, reset } = useStopwatch({
       autoStart: true,
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -48,6 +49,12 @@ const Quiz = React.memo(
       }
     };
 
+    const repeatQuiz = () => {
+      setRestQuiz(fixedQuizSize);
+      setQuizQueue(createQuiz());
+      reset();
+    };
+
     return (
       <VStack maxW="100vh" maxh="95vh">
         <HStack>
@@ -80,6 +87,7 @@ const Quiz = React.memo(
           <ResultModal
             setIsStarted={setIsStarted}
             setQuizQueue={setQuizQueue}
+            repeatQuiz={repeatQuiz}
             disclosure={{ isOpen, onOpen, onClose }}
           />
         )}
