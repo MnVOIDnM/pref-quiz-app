@@ -1,20 +1,23 @@
-import Title from "./Title";
-import Quiz from "./Quiz";
 import { useState, useEffect, useReducer } from "react";
 import { Center } from "@chakra-ui/react";
+import Title from "./Title";
+import Quiz from "./Quiz";
 import { createQuiz } from "../helpers";
+import { collection, orderBy, query, limit, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isStartedState, quizQueueState } from "../recoil_state";
 
 function App() {
-  const [isStarted, setIsStarted] = useState(false);
-  const [isKana, setIsKana] = useState(false);
-  const [kanaType, setKanaType] = useState("name");
+  const isStarted = useRecoilValue(isStartedState);
+  const setQuizQueue = useSetRecoilState(quizQueueState);
+  const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
 
   const initQuizState = {
     quizType: "",
     quizSize: 0,
   };
   const modeReducer = (state, action) => {
-    setIsStarted((flag) => !flag);
     switch (action) {
       case "single10":
         return { ...state, quizType: "imgSingle", quizSize: 10 };
@@ -30,26 +33,40 @@ function App() {
   };
   const [quizState, dispatch] = useReducer(modeReducer, initQuizState);
 
-  const [quizQueue, setQuizQueue] = useState();
   useEffect(() => {
     setQuizQueue(createQuiz());
+  }, []);
+
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const q = query(
+          collection(db, "ranking"),
+          orderBy("score", "desc"),
+          limit(3)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          const dataWithId = { ...doc.data(), id: doc.id };
+          userData.push(dataWithId);
+        });
+        setUserData(userData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getUserData();
+    console.log("getUserData called");
   }, []);
 
   return (
     <Center>
       {isStarted ? (
-        <Quiz
-          setIsStarted={setIsStarted}
-          quizQueueState={[quizQueue, setQuizQueue]}
-          quizState={quizState}
-          kanaType={kanaType}
-        />
+        <Quiz quizState={quizState} userData={userData} />
       ) : (
-        <Title
-          dispatch={dispatch}
-          isKanaState={[isKana, setIsKana]}
-          setKanaType={setKanaType}
-        />
+        <Title dispatch={dispatch} isAuthState={[isAuth, setIsAuth]} />
       )}
     </Center>
   );

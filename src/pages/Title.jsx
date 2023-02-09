@@ -3,7 +3,6 @@ import {
   VStack,
   HStack,
   Image,
-  Box,
   Switch,
   FormLabel,
   FormControl,
@@ -11,11 +10,17 @@ import {
 import React from "react";
 import coverImage from "../images/japanIllust.png";
 import ModeSelectButton from "../components/title/ModeSelectButton";
+import Header from "../components/Header";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { isKanaState, kanaTypeState } from "../recoil_state";
 
-const Title = React.memo(({ dispatch, isKanaState, setKanaType }) => {
-  const [isKana, setIsKana] = isKanaState;
+const Title = React.memo(({ dispatch, isAuthState }) => {
+  const [isKana, setIsKana] = useRecoilState(isKanaState);
+  const setKanaType = useSetRecoilState(kanaTypeState);
+
   return (
     <VStack maxW="100vh" maxh="90vh">
+      <Header isAuthState={isAuthState} />
       <Heading
         size="3xl"
         pos="absolute"

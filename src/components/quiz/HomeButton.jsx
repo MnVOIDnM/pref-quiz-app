@@ -1,17 +1,24 @@
 import React from "react";
 import { Button } from "@chakra-ui/react";
 import { createQuiz } from "../../helpers";
+import { useSetRecoilState } from "recoil";
+import { isStartedState, quizQueueState } from "../../recoil_state";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
-const HomeButton = React.memo(({ setIsStarted, setQuizQueue }) => {
+const HomeButton = React.memo(() => {
+  const setIsStarted = useSetRecoilState(isStartedState);
+  const setQuizQueue = useSetRecoilState(quizQueueState);
+
   return (
     <Button
-      colorScheme="blue"
+      colorScheme="facebook"
       onClick={() => {
         setIsStarted((flag) => !flag);
         setQuizQueue(createQuiz());
       }}
     >
-      ホーム画面に戻る
+      <ArrowBackIcon />
+      ホームにもどる
     </Button>
   );
 });
