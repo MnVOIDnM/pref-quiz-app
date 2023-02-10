@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -52,7 +52,12 @@ const ResultModal = ({
   };
 
   return (
-    <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      scrollBehavior="inside"
+      closeOnOverlayClick={false}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <ModalOverlay />
       <ModalContent minW="800px" minH="50vh">
         <ModalBody>
@@ -95,12 +100,7 @@ const ResultModal = ({
                 </Text>
               </GridItem>
             </Grid>
-            <TableContainer
-              overflowY="auto"
-              maxH="400px"
-              maxW="400px"
-              minW="350px"
-            >
+            <TableContainer maxH="400px" minW="350px" overflowY="auto">
               <Table variant="simple">
                 <Thead>
                   <Tr>
