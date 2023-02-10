@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  HStack,
-  VStack,
-  Box,
-  useDisclosure,
-  Flex,
-  Square,
-  Spacer,
-} from "@chakra-ui/react";
+import { VStack, Box, useDisclosure, Flex, Square } from "@chakra-ui/react";
 import HomeButton from "../components/quiz/HomeButton";
-import DisplayJudge from "../components/quiz/DisplayJudge";
 import QuizChoices from "../components/quiz/QuizChoices";
 import QuizImage from "../components/quiz/QuizImage";
 import ResultModal from "../components/quiz/ResultModal";
@@ -25,9 +16,9 @@ const Quiz = ({ quizState, userData }) => {
   const kanaType = useRecoilValue(kanaTypeState);
   const [quizQueue, setQuizQueue] = useRecoilState(quizQueueState);
 
+  const [isButtonDisabled, setisButtonDisabled] = useState(false);
+  const [choiceButtonColor, setChoiceButtonColor] = useState("gray");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isWrong, setIsWrong] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
   const [fixedQuizSize] = useState(quizState.quizSize);
   const [restQuiz, setRestQuiz] = useState(quizState.quizSize);
   const counter = fixedQuizSize - restQuiz;
@@ -35,56 +26,67 @@ const Quiz = ({ quizState, userData }) => {
   const [score, setScore] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [time, setTime] = useState(0);
-  const [isTimerRunning, setIsTimerRunning] =
-    useRecoilState(isTimerRunningState);
+  const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
 
   useEffect(() => {
     let interval;
-    if (isTimerRunning) {
+    if (isRunning) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 10);
       }, 10);
-    } else if (!isTimerRunning) {
+    } else if (!isRunning) {
       clearInterval(interval);
     }
-    console.log("timer called");
     return () => {
       clearInterval(interval);
     };
-  }, [isTimerRunning]);
+  }, [isRunning]);
 
   const updateQuiz = () => {
     if (restQuiz > 1) {
       setRestQuiz((prev) => prev - 1);
     } else if (restQuiz == 1) {
+      const scoreThisTime = Math.floor(
+        ((1000000 - time) * (1 - incorrectCount / 100)) / 1000
+      );
+      setScore(scoreThisTime);
+      setIsRunning(false);
       onOpen();
-      setIsTimerRunning(false);
     } else {
       throw new Error("error");
     }
   };
+
   const judge = (select) => {
     if (select == quizQueue.answer[counter][kanaType]) {
-      setIsCorrect((prev) => !prev);
+      setisButtonDisabled(true);
+      setChoiceButtonColor("green");
       setTimeout(() => {
-        setIsCorrect((prev) => !prev);
+        setisButtonDisabled(false);
+        setChoiceButtonColor("gray");
       }, 200);
       updateQuiz();
     } else {
-      setIsWrong((prev) => !prev);
+      setisButtonDisabled(true);
+      setChoiceButtonColor("red");
+      setIncorrectCount((prev) => prev + 1);
       setTimeout(() => {
-        setIsWrong((prev) => !prev);
-      }, 800);
+        setisButtonDisabled(false);
+        setChoiceButtonColor("gray");
+      }, 600);
     }
   };
 
   const repeatQuiz = () => {
     setRestQuiz(fixedQuizSize);
+    setIsRunning(true);
+    setIncorrectCount(0);
+    setTime(0);
     setQuizQueue(createQuiz());
   };
 
   return (
-    <VStack w="100vw" h="100vh">
+    <VStack w="100vw" h="95vh">
       <Flex>
         <Box mt={1} mr={5}>
           <HomeButton />
@@ -93,16 +95,22 @@ const Quiz = ({ quizState, userData }) => {
           <QuizImage counter={counter} quizState={quizState} />
         </Square>
       </Flex>
-      <Flex h="15vh" w="100%" bg="whatsapp.100" justifyContent="right">
-        <QuizChoices judge={judge} isWrong={isWrong} counter={counter} />
-      </Flex>
-      {isOpen && (
-        <ResultModal
-          repeatQuiz={repeatQuiz}
-          disclosure={{ isOpen, onOpen, onClose }}
-          userData={userData}
+      <Flex h="15vh" w="100%" justifyContent="right">
+        <QuizChoices
+          judge={judge}
+          counter={counter}
+          choiceButtonColor={choiceButtonColor}
+          isButtonDisabled={isButtonDisabled}
         />
-      )}
+      </Flex>
+      <ResultModal
+        repeatQuiz={repeatQuiz}
+        disclosure={{ isOpen, onClose }}
+        userData={userData}
+        score={score}
+        time={time}
+        incorrectCount={incorrectCount}
+      />
     </VStack>
   );
 };

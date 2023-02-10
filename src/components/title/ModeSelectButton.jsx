@@ -13,8 +13,8 @@ import {
   ButtonGroup,
   Button,
 } from "@chakra-ui/react";
-import singleImage from "../../images/hokkaidoSingle.png";
-import countryImage from "../../images/hokkaidoCountry.png";
+import singleImage from "../../images/iconSingle.png";
+import countryImage from "../../images/iconCountry.png";
 import { useSetRecoilState } from "recoil";
 import { isStartedState, isTimerRunningState } from "../../recoil_state";
 
@@ -22,25 +22,26 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
   const setIsStarted = useSetRecoilState(isStartedState);
   const setIsTimerRunning = useSetRecoilState(isTimerRunningState);
 
+  const startGame = () => {
+    setIsStarted(true);
+    setIsTimerRunning(true);
+  };
+
   const singleMode10 = () => {
     dispatch("single10");
-    setIsStarted((flag) => !flag);
-    setIsTimerRunning((flag) => !flag);
+    startGame();
   };
   const singleMode47 = () => {
     dispatch("single47");
-    setIsStarted((flag) => !flag);
-    setIsTimerRunning((flag) => !flag);
+    startGame();
   };
   const countryMode10 = () => {
     dispatch("country10");
-    setIsStarted((flag) => !flag);
-    setIsTimerRunning((flag) => !flag);
+    startGame();
   };
   const countryMode47 = () => {
     dispatch("country47");
-    setIsStarted((flag) => !flag);
-    setIsTimerRunning((flag) => !flag);
+    startGame();
   };
   return (
     <>

@@ -3,7 +3,14 @@ import { Center } from "@chakra-ui/react";
 import Title from "./Title";
 import Quiz from "./Quiz";
 import { createQuiz } from "../helpers";
-import { collection, orderBy, query, limit, getDocs } from "firebase/firestore";
+import {
+  collection,
+  orderBy,
+  query,
+  limit,
+  getDocs,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isStartedState, quizQueueState } from "../recoil_state";
@@ -40,25 +47,26 @@ function App() {
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const q = query(
-          collection(db, "ranking"),
-          orderBy("score", "desc"),
-          limit(3)
-        );
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          const dataWithId = { ...doc.data(), id: doc.id };
-          userData.push(dataWithId);
-        });
-        setUserData(userData);
-      } catch (err) {
+    const q = query(
+      collection(db, "ranking"),
+      orderBy("score", "desc"),
+      limit(20)
+    );
+    const unsub = onSnapshot(
+      q,
+      (querySnapshot) => {
+        const dataWithID = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setUserData(dataWithID);
+        console.log("unsub");
+      },
+      (err) => {
         console.error(err);
       }
-    };
-    getUserData();
-    console.log("getUserData called");
+    );
+    return () => unsub();
   }, []);
 
   return (
