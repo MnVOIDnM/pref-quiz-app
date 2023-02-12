@@ -1,36 +1,56 @@
+import { useEffect, useReducer } from "react";
+import { Center } from "@chakra-ui/react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isStartedState, quizQueueState } from "../recoil_state";
 import Title from "./Title";
 import Quiz from "./Quiz";
-import { useState, useEffect, useReducer } from "react";
-import { Center } from "@chakra-ui/react";
 import { createQuiz } from "../helpers";
 
 function App() {
-  const [isStarted, setIsStarted] = useState(false);
-  const [isKana, setIsKana] = useState(false);
-  const [kanaType, setKanaType] = useState("name");
+  const isStarted = useRecoilValue(isStartedState);
+  const setQuizQueue = useSetRecoilState(quizQueueState);
 
   const initQuizState = {
     quizType: "",
     quizSize: 0,
+    currentMode: "",
   };
   const modeReducer = (state, action) => {
-    setIsStarted((flag) => !flag);
     switch (action) {
       case "single10":
-        return { ...state, quizType: "imgSingle", quizSize: 10 };
+        return {
+          ...state,
+          quizType: "imgSingle",
+          quizSize: 10,
+          currentMode: "single10",
+        };
       case "single47":
-        return { ...state, quizType: "imgSingle", quizSize: 47 };
+        return {
+          ...state,
+          quizType: "imgSingle",
+          quizSize: 47,
+          currentMode: "single47",
+        };
       case "country10":
-        return { ...state, quizType: "imgCountry", quizSize: 10 };
+        return {
+          ...state,
+          quizType: "imgCountry",
+          quizSize: 10,
+          currentMode: "country10",
+        };
       case "country47":
-        return { ...state, quizType: "imgCountry", quizSize: 47 };
+        return {
+          ...state,
+          quizType: "imgCountry",
+          quizSize: 47,
+          currentMode: "country47",
+        };
       default:
         return state;
     }
   };
   const [quizState, dispatch] = useReducer(modeReducer, initQuizState);
 
-  const [quizQueue, setQuizQueue] = useState();
   useEffect(() => {
     setQuizQueue(createQuiz());
   }, []);
@@ -38,18 +58,9 @@ function App() {
   return (
     <Center>
       {isStarted ? (
-        <Quiz
-          setIsStarted={setIsStarted}
-          quizQueueState={[quizQueue, setQuizQueue]}
-          quizState={quizState}
-          kanaType={kanaType}
-        />
+        <Quiz quizState={quizState} />
       ) : (
-        <Title
-          dispatch={dispatch}
-          isKanaState={[isKana, setIsKana]}
-          setKanaType={setKanaType}
-        />
+        <Title dispatch={dispatch} />
       )}
     </Center>
   );

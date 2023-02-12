@@ -1,23 +1,28 @@
 import React from "react";
 import { Button, ButtonGroup } from "@chakra-ui/react";
+import { useRecoilValue } from "recoil";
+import { kanaTypeState, quizQueueState } from "../../recoil_state";
 
 const QuizChoices = React.memo(
-  ({ quizQueue, judge, isWrong, counter, kanaType }) => {
+  ({ judge, counter, choiceButtonColor, isButtonDisabled }) => {
+    const kanaType = useRecoilValue(kanaTypeState);
+    const quizQueue = useRecoilValue(quizQueueState);
+
     return (
       <>
-        <ButtonGroup w="100%" h="20%" display="flex" justifyContent="right">
+        <ButtonGroup w="95%" mx={1}>
           {quizQueue.choices[counter].map((choice) => (
             <Button
               px={12}
-              py={8}
-              fontSize="1.7rem"
-              w="23%"
+              py={12}
+              w="25%"
+              colorScheme={choiceButtonColor}
+              fontSize="2.8rem"
               key={choice.id}
-              isDisabled={isWrong}
+              isDisabled={isButtonDisabled}
               onClick={() => judge(choice[kanaType])}
             >
               {choice[kanaType]}
-              {/* {console.log("choice btn rendered")} */}
             </Button>
           ))}
         </ButtonGroup>
