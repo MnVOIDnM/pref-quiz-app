@@ -13,7 +13,7 @@ const HomeButton = React.memo(() => {
     <Button
       colorScheme="facebook"
       onClick={() => {
-        setIsStarted((flag) => !flag);
+        setIsStarted(false);
         setQuizQueue(createQuiz());
       }}
     >

@@ -7,8 +7,11 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
+import { useRecoilValue } from "recoil";
+import { userDataState } from "../../recoil_state";
 
-const RankingTable = ({ userData }) => {
+const RankingTable = () => {
+  const userData = useRecoilValue(userDataState);
   return (
     <TableContainer maxH="400px" minW="350px" overflowY="auto">
       <Table variant="simple">

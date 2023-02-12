@@ -5,39 +5,65 @@ import QuizChoices from "../components/quiz/QuizChoices";
 import QuizImage from "../components/quiz/QuizImage";
 import ResultModal from "../components/quiz/ResultModal";
 import { createQuiz } from "../helpers";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   isTimerRunningState,
   kanaTypeState,
   quizQueueState,
+  userDataState,
 } from "../recoil_state";
+import { collection, orderBy, query, limit, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Quiz = ({ quizState }) => {
   const kanaType = useRecoilValue(kanaTypeState);
+  const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
   const [quizQueue, setQuizQueue] = useRecoilState(quizQueueState);
-
+  const setUserData = useSetRecoilState(userDataState);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isButtonDisabled, setisButtonDisabled] = useState(false);
   const [choiceButtonColor, setChoiceButtonColor] = useState("gray");
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [fixedQuizSize] = useState(quizState.quizSize);
   const [restQuiz, setRestQuiz] = useState(quizState.quizSize);
-  const counter = fixedQuizSize - restQuiz;
-
   const [score, setScore] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [time, setTime] = useState(0);
-  const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
+  const counter = fixedQuizSize - restQuiz;
+
+  useEffect(() => {
+    const q = query(
+      collection(db, quizState.currentMode),
+      orderBy("score", "desc"),
+      limit(20)
+    );
+    const getRanking = async () => {
+      const querySnapshot = await getDocs(q);
+      const dataWithID = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setUserData(dataWithID);
+    };
+    getRanking();
+  }, []);
 
   useEffect(() => {
     let interval;
+    let innerTime = 0;
     if (isRunning) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
+        innerTime += 10;
       }, 10);
     } else if (!isRunning) {
       clearInterval(interval);
     }
     return () => {
+      const scoreThisTime = Math.floor(
+        (1000 / innerTime) * (100 - incorrectCount) * 10
+      );
+      setTime(innerTime);
+      setScore(scoreThisTime);
+      onOpen();
       clearInterval(interval);
     };
   }, [isRunning]);
@@ -46,12 +72,7 @@ const Quiz = ({ quizState }) => {
     if (restQuiz > 1) {
       setRestQuiz((prev) => prev - 1);
     } else if (restQuiz == 1) {
-      const scoreThisTime = Math.floor(
-        (1000 / time) * (100 - incorrectCount) * 10
-      );
-      setScore(scoreThisTime);
       setIsRunning(false);
-      onOpen();
     } else {
       throw new Error("error");
     }
@@ -81,7 +102,6 @@ const Quiz = ({ quizState }) => {
     setRestQuiz(fixedQuizSize);
     setIsRunning(true);
     setIncorrectCount(0);
-    setTime(0);
     setQuizQueue(createQuiz());
   };
 

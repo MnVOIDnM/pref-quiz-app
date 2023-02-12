@@ -34,3 +34,8 @@ export const userIdState = atom({
   key: "userId",
   default: "",
 });
+
+export const userDataState = atom({
+  key: "userData",
+  default: [],
+});

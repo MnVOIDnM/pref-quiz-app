@@ -9,21 +9,12 @@ import {
   Box,
   VStack,
 } from "@chakra-ui/react";
-import {
-  collection,
-  orderBy,
-  query,
-  limit,
-  onSnapshot,
-} from "firebase/firestore";
-import { db } from "../../firebase";
 import HomeButton from "./HomeButton";
 import RankingTable from "./RankingTable";
 import ScoreGrid from "./ScoreGrid";
 import RankRegistrationForm from "./RankRegistrationForm";
-import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { isAuthState, userIdState } from "../../recoil_state";
+import { isAuthState } from "../../recoil_state";
 
 const ResultModal = ({
   disclosure,
@@ -35,36 +26,6 @@ const ResultModal = ({
 }) => {
   const { isOpen, onClose } = disclosure;
   const isAuth = useRecoilValue(isAuthState);
-  const userId = useRecoilValue(userIdState);
-  const [userData, setUserData] = useState([]);
-  const [currentUserData, setCurrentUserData] = useState({});
-
-  useEffect(() => {
-    const q = query(
-      collection(db, quizState.currentMode),
-      orderBy("score", "desc"),
-      limit(20)
-    );
-    const unsub = onSnapshot(
-      q,
-      (querySnapshot) => {
-        const dataWithID = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setUserData(dataWithID);
-      },
-      (err) => {
-        console.error(err);
-      }
-    );
-    const filteredUserData = userData.filter((user) => user.id == userId);
-    setCurrentUserData(filteredUserData);
-    console.log(userData[0].id);
-    return () => unsub();
-  }, []);
-
-  const isBestScore = score > currentUserData.score;
 
   return (
     <Modal
@@ -82,12 +43,12 @@ const ResultModal = ({
               incorrectCount={incorrectCount}
               time={time}
             />
-            <RankingTable userData={userData} />
+            <RankingTable />
           </HStack>
         </ModalBody>
         <ModalFooter>
           <VStack>
-            {isAuth && isBestScore && (
+            {isAuth && (
               <RankRegistrationForm quizState={quizState} score={score} />
             )}
             <Box>
