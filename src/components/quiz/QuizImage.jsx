@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 
 const QuizImage = React.memo(({ counter, quizState }) => {
   const quizQueue = useRecoilValue(quizQueueState);
-
   return <Image src={quizQueue.answer[counter][quizState.quizType]} />;
 });
 

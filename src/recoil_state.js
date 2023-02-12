@@ -24,3 +24,13 @@ export const isTimerRunningState = atom({
   key: "isTimerRunning",
   default: false,
 });
+
+export const isAuthState = atom({
+  key: "isAuth",
+  default: localStorage.getItem("isAuth"),
+});
+
+export const userIdState = atom({
+  key: "userId",
+  default: "",
+});

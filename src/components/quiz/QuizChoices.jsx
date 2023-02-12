@@ -10,7 +10,7 @@ const QuizChoices = React.memo(
 
     return (
       <>
-        <ButtonGroup w="95%" m={1}>
+        <ButtonGroup w="95%" mx={1}>
           {quizQueue.choices[counter].map((choice) => (
             <Button
               px={12}

@@ -14,16 +14,21 @@ import {
 import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "../firebase";
 import React, { useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { isAuthState, userIdState } from "../recoil_state";
+import { SpinnerIcon } from "@chakra-ui/icons";
 
-const Header = ({ isAuthState }) => {
-  const [isAuth, setIsAuth] = isAuthState;
+const Header = () => {
+  const [isAuth, setIsAuth] = useRecoilState(isAuthState);
   const [userName, setUserName] = useState("");
   const [userIcon, setUserIcon] = useState("");
+  const setUserId = useSetRecoilState(userIdState);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setUserName(user.displayName);
       setUserIcon(user.photoURL);
+      setUserId(user.uid);
     }
   });
 
@@ -63,11 +68,12 @@ const Header = ({ isAuthState }) => {
                   borderRadius="full"
                   boxSize="30px"
                   src={userIcon}
+                  fallback={<SpinnerIcon />}
                   alt="user icon"
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem>{userName}さん</MenuItem>
+                <MenuItem>{userName} さん</MenuItem>
                 <MenuItem color="red" onClick={signOutFromGoogle}>
                   ログアウト
                 </MenuItem>

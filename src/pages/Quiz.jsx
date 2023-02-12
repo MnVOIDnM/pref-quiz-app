@@ -12,7 +12,7 @@ import {
   quizQueueState,
 } from "../recoil_state";
 
-const Quiz = ({ quizState, userData }) => {
+const Quiz = ({ quizState }) => {
   const kanaType = useRecoilValue(kanaTypeState);
   const [quizQueue, setQuizQueue] = useRecoilState(quizQueueState);
 
@@ -47,7 +47,7 @@ const Quiz = ({ quizState, userData }) => {
       setRestQuiz((prev) => prev - 1);
     } else if (restQuiz == 1) {
       const scoreThisTime = Math.floor(
-        ((1000000 - time) * (1 - incorrectCount / 100)) / 1000
+        (1000 / time) * (100 - incorrectCount) * 10
       );
       setScore(scoreThisTime);
       setIsRunning(false);
@@ -86,8 +86,8 @@ const Quiz = ({ quizState, userData }) => {
   };
 
   return (
-    <VStack w="100vw" h="95vh">
-      <Flex>
+    <VStack w="100vw" h="100vh">
+      <Flex h="85%">
         <Box mt={1} mr={5}>
           <HomeButton />
         </Box>
@@ -95,7 +95,7 @@ const Quiz = ({ quizState, userData }) => {
           <QuizImage counter={counter} quizState={quizState} />
         </Square>
       </Flex>
-      <Flex h="15vh" w="100%" justifyContent="right">
+      <Flex h="15%" w="100%" justifyContent="right">
         <QuizChoices
           judge={judge}
           counter={counter}
@@ -106,10 +106,10 @@ const Quiz = ({ quizState, userData }) => {
       <ResultModal
         repeatQuiz={repeatQuiz}
         disclosure={{ isOpen, onClose }}
-        userData={userData}
         score={score}
         time={time}
         incorrectCount={incorrectCount}
+        quizState={quizState}
       />
     </VStack>
   );

@@ -27,22 +27,11 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
     setIsTimerRunning(true);
   };
 
-  const singleMode10 = () => {
-    dispatch("single10");
+  const modeSelect = (mode) => {
+    dispatch(mode);
     startGame();
   };
-  const singleMode47 = () => {
-    dispatch("single47");
-    startGame();
-  };
-  const countryMode10 = () => {
-    dispatch("country10");
-    startGame();
-  };
-  const countryMode47 = () => {
-    dispatch("country47");
-    startGame();
-  };
+
   return (
     <>
       <Center p={1}>
@@ -66,8 +55,8 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
             <PopoverHeader>日本全体が表示されるよ</PopoverHeader>
             <PopoverBody>
               <ButtonGroup gap="2">
-                <Button onClick={countryMode10}>１０問</Button>
-                <Button onClick={countryMode47}>４７問</Button>
+                <Button onClick={() => modeSelect("country10")}>１０問</Button>
+                <Button onClick={() => modeSelect("country47")}>４７問</Button>
               </ButtonGroup>
             </PopoverBody>
           </PopoverContent>
@@ -94,8 +83,8 @@ const ModeSelectButton = React.memo(({ dispatch }) => {
             <PopoverHeader>1つの都道府県だけが表示されるよ</PopoverHeader>
             <PopoverBody>
               <ButtonGroup gap="2">
-                <Button onClick={singleMode10}>１０問</Button>
-                <Button onClick={singleMode47}>４７問</Button>
+                <Button onClick={() => modeSelect("single10")}>１０問</Button>
+                <Button onClick={() => modeSelect("single47")}>４７問</Button>
               </ButtonGroup>
             </PopoverBody>
           </PopoverContent>
