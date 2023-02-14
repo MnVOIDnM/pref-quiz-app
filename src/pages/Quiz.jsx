@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { VStack, Box, useDisclosure, Flex, Square } from "@chakra-ui/react";
+import {
+  VStack,
+  Box,
+  useDisclosure,
+  Flex,
+  Square,
+  Spacer,
+} from "@chakra-ui/react";
 import HomeButton from "../components/quiz/HomeButton";
 import QuizChoices from "../components/quiz/QuizChoices";
 import QuizImage from "../components/quiz/QuizImage";
@@ -20,15 +27,16 @@ const Quiz = ({ quizState }) => {
   const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
   const [quizQueue, setQuizQueue] = useRecoilState(quizQueueState);
   const setUserData = useSetRecoilState(userDataState);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [isButtonDisabled, setisButtonDisabled] = useState(false);
   const [choiceButtonColor, setChoiceButtonColor] = useState("gray");
-  const [fixedQuizSize] = useState(quizState.quizSize);
   const [restQuiz, setRestQuiz] = useState(quizState.quizSize);
   const [score, setScore] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [time, setTime] = useState(0);
-  const counter = fixedQuizSize - restQuiz;
+  const counter = quizState.quizSize - restQuiz;
 
   useEffect(() => {
     const q = query(
@@ -78,42 +86,45 @@ const Quiz = ({ quizState }) => {
     }
   };
 
+  const setButtonEffect = (isDisabled, color) => {
+    setisButtonDisabled(isDisabled);
+    setChoiceButtonColor(color);
+  };
+
   const judge = (select) => {
     if (select == quizQueue.answer[counter][kanaType]) {
-      setisButtonDisabled(true);
-      setChoiceButtonColor("green");
+      setButtonEffect(true, "green");
       setTimeout(() => {
-        setisButtonDisabled(false);
-        setChoiceButtonColor("gray");
+        setButtonEffect(false, "gray");
       }, 200);
       updateQuiz();
     } else {
-      setisButtonDisabled(true);
-      setChoiceButtonColor("red");
+      setButtonEffect(true, "red");
       setIncorrectCount((prev) => prev + 1);
       setTimeout(() => {
-        setisButtonDisabled(false);
-        setChoiceButtonColor("gray");
+        setButtonEffect(false, "gray");
       }, 600);
     }
   };
 
   const repeatQuiz = () => {
-    setRestQuiz(fixedQuizSize);
+    setRestQuiz(quizState.quizSize);
     setIsRunning(true);
     setIncorrectCount(0);
     setQuizQueue(createQuiz());
   };
 
   return (
-    <VStack w="100vw" h="100vh">
+    <VStack w="100vw" h="95vh">
       <Flex h="85%">
         <Box mt={1} mr={5}>
           <HomeButton />
         </Box>
-        <Square size="85vh" mt={1}>
+        <Spacer />
+        <Square size="80vh" mt={1}>
           <QuizImage counter={counter} quizState={quizState} />
         </Square>
+        <Spacer />
       </Flex>
       <Flex h="15%" w="100%" justifyContent="right">
         <QuizChoices
