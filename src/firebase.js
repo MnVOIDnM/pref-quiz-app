@@ -5,7 +5,8 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBo4-15UIB8gfv2-a95tJxlbgHYcsHqCJY",
-  authDomain: "pref-quiz-app-dce04.firebaseapp.com",
+  // authDomain: "pref-quiz-app-dce04.firebaseapp.com",
+  authDomain: "pref-quiz-app.vercel.com",
   projectId: "pref-quiz-app-dce04",
   storageBucket: "pref-quiz-app-dce04.appspot.com",
   messagingSenderId: "676772230657",
