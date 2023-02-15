@@ -18,7 +18,7 @@ const HomeButton = React.memo(() => {
       }}
     >
       <ArrowBackIcon />
-      ホームにもどる
+      さいしょにもどる
     </Button>
   );
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   VStack,
   Box,
@@ -38,6 +38,7 @@ const Quiz = ({ quizState }) => {
   const [time, setTime] = useState(0);
   const counter = quizState.quizSize - restQuiz;
 
+  // Get ranking data from firebase
   useEffect(() => {
     const q = query(
       collection(db, quizState.currentMode),
@@ -71,7 +72,6 @@ const Quiz = ({ quizState }) => {
       );
       setTime(innerTime);
       setScore(scoreThisTime);
-      onOpen();
       clearInterval(interval);
     };
   }, [isRunning]);
@@ -81,29 +81,30 @@ const Quiz = ({ quizState }) => {
       setRestQuiz((prev) => prev - 1);
     } else if (restQuiz == 1) {
       setIsRunning(false);
+      onOpen();
     } else {
       throw new Error("error");
     }
   };
 
-  const setButtonEffect = (isDisabled, color) => {
-    setisButtonDisabled(isDisabled);
+  const setButtonEffect = (color, timeout) => {
+    setisButtonDisabled(true);
     setChoiceButtonColor(color);
+    setTimeout(() => {
+      setisButtonDisabled(false);
+      setChoiceButtonColor("gray");
+    }, timeout);
   };
 
   const judge = (select) => {
     if (select == quizQueue.answer[counter][kanaType]) {
-      setButtonEffect(true, "green");
-      setTimeout(() => {
-        setButtonEffect(false, "gray");
-      }, 200);
+      setButtonEffect("green", 200);
       updateQuiz();
-    } else {
-      setButtonEffect(true, "red");
+    } else if (select != quizQueue.answer[counter][kanaType]) {
+      setButtonEffect("red", 500);
       setIncorrectCount((prev) => prev + 1);
-      setTimeout(() => {
-        setButtonEffect(false, "gray");
-      }, 600);
+    } else {
+      throw new Error("error");
     }
   };
 
@@ -112,16 +113,17 @@ const Quiz = ({ quizState }) => {
     setIsRunning(true);
     setIncorrectCount(0);
     setQuizQueue(createQuiz());
+    onClose();
   };
 
   return (
-    <VStack w="100vw" h="95vh">
+    <VStack w="100vw" h="90vh">
       <Flex h="85%">
         <Box mt={1} mr={5}>
           <HomeButton />
         </Box>
         <Spacer />
-        <Square size="80vh" mt={1}>
+        <Square size="75vh" mt={1}>
           <QuizImage counter={counter} quizState={quizState} />
         </Square>
         <Spacer />

@@ -53,15 +53,7 @@ const ResultModal = ({
             )}
             <Box>
               <HomeButton m={3} />
-              <Button
-                m={3}
-                px={1}
-                variant="outline"
-                onClick={() => {
-                  onClose();
-                  repeatQuiz();
-                }}
-              >
+              <Button m={3} px={1} variant="outline" onClick={repeatQuiz}>
                 もう一度する
               </Button>
             </Box>
