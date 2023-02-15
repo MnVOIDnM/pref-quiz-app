@@ -11,7 +11,13 @@ import {
   MenuItem,
   Flex,
 } from "@chakra-ui/react";
-import { onAuthStateChanged, signInWithRedirect, signOut } from "firebase/auth";
+import {
+  getRedirectResult,
+  onAuthStateChanged,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+} from "firebase/auth";
 import { auth, provider } from "../firebase";
 import React, { useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -33,11 +39,20 @@ const Header = () => {
   });
 
   const signInWithGoogle = () => {
-    signInWithRedirect(auth, provider).then(() => {
+    signInWithPopup(auth, provider).then(() => {
       localStorage.setItem("isAuth", true);
       setIsAuth(true);
     });
   };
+
+  // const signInWithGoogle = () => {
+  //   signInWithRedirect(auth, provider).then(() => {
+  //     getRedirectResult(auth).then(() => {
+  //       localStorage.setItem("isAuth", true);
+  //       setIsAuth(true);
+  //     });
+  //   });
+  // };
 
   const signOutFromGoogle = () => {
     signOut(auth).then(() => {
