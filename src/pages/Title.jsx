@@ -20,7 +20,7 @@ const Title = React.memo(({ dispatch, isAuthState }) => {
 
   return (
     <VStack maxW="100vh" maxh="90vh">
-      <Header isAuthState={isAuthState} />
+      {/* <Header isAuthState={isAuthState} /> */}
       <Heading
         size="3xl"
         pos="absolute"

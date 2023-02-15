@@ -48,9 +48,10 @@ const ResultModal = ({
         </ModalBody>
         <ModalFooter>
           <VStack>
-            {isAuth && (
+            {/* {isAuth && (
               <RankRegistrationForm quizState={quizState} score={score} />
-            )}
+            )} */}
+            <RankRegistrationForm quizState={quizState} score={score} />
             <Box>
               <HomeButton m={3} />
               <Button m={3} px={1} variant="outline" onClick={repeatQuiz}>

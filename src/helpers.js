@@ -24,8 +24,8 @@ export const createQuiz = () => {
       choices.push(choice);
     });
     choices.push(answer);
-    // quizChoices.push(shuffle(choices));
-    quizChoices.push(choices);
+    quizChoices.push(shuffle(choices));
+    // quizChoices.push(choices);
   }
   const queue = {
     choices: quizChoices,
