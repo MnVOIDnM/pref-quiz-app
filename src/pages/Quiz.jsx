@@ -69,7 +69,7 @@ const Quiz = ({ quizState }) => {
     }
     return () => {
       const scoreThisTime = Math.floor(
-        (1000 / innerTime) * (100 - incorrectCount) * 10
+        (1000 / innerTime) * (100 - incorrectCount) * 30
       );
       setTime(innerTime);
       setScore(scoreThisTime);
