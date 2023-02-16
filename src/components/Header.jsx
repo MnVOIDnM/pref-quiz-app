@@ -11,13 +11,7 @@ import {
   MenuItem,
   Flex,
 } from "@chakra-ui/react";
-import {
-  getRedirectResult,
-  onAuthStateChanged,
-  signInWithPopup,
-  signInWithRedirect,
-  signOut,
-} from "firebase/auth";
+import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "../firebase";
 import React, { useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";

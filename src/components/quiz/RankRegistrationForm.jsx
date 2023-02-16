@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { collection, setDoc, doc, addDoc } from "firebase/firestore";
+import {
+  collection,
+  setDoc,
+  doc,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import { Input, Button, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
@@ -8,14 +14,14 @@ import { userIdState } from "../../recoil_state";
 const RankRegistrationForm = ({ quizState, score }) => {
   const [showingRegistrationForm, setShowingRegistrationForm] = useState(true);
   const [nickname, setNickname] = useState("");
-  // const userId = useRecoilValue(userIdState);
+  const userId = useRecoilValue(userIdState);
 
   const isNicknameError = nickname === "";
 
   const registerRank = (e) => {
     e.preventDefault();
     try {
-      // use signed in user ID
+      // // use signed in user ID
       // const docRef = doc(collection(db, quizState.currentMode), `${userId}`);
       // setDoc(docRef, {
       //   name: nickname,
@@ -26,6 +32,7 @@ const RankRegistrationForm = ({ quizState, score }) => {
       addDoc(collection(db, quizState.currentMode), {
         name: nickname,
         score: score,
+        timestamp: serverTimestamp(),
       });
     } catch (err) {
       console.error(err);

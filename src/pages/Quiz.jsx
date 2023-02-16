@@ -19,14 +19,7 @@ import {
   quizQueueState,
   userDataState,
 } from "../recoil_state";
-import {
-  collection,
-  orderBy,
-  query,
-  limit,
-  getDocs,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, orderBy, query, limit, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
 const Quiz = ({ quizState }) => {
@@ -46,7 +39,6 @@ const Quiz = ({ quizState }) => {
   const counter = quizState.quizSize - restQuiz;
 
   // Get ranking data from firebase using getDocs
-
   useEffect(() => {
     const q = query(
       collection(db, quizState.currentMode),
@@ -62,25 +54,8 @@ const Quiz = ({ quizState }) => {
       setUserData(dataWithID);
     };
     getRanking();
+    // console.log("ranking data fetched from firebase");
   }, []);
-
-  // Get ranking using snapshot
-
-  // useEffect(() => {
-  //   const q = query(
-  //     collection(db, quizState.currentMode),
-  //     orderBy("score", "desc"),
-  //     limit(20)
-  //   );
-  //   const unsub = onSnapshot(q, (querySnapshot) => {
-  //     const dataWithID = querySnapshot.docs.map((doc) => ({
-  //       ...doc.data(),
-  //       id: doc.id,
-  //     }));
-  //     setUserData(dataWithID);
-  //   });
-  //   return unsub();
-  // }, []);
 
   useEffect(() => {
     let interval;

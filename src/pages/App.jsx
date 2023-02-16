@@ -13,7 +13,7 @@ function App() {
   const initQuizState = {
     quizType: "",
     quizSize: 0,
-    currentMode: "",
+    currentMode: "country10",
   };
   const modeReducer = (state, action) => {
     switch (action) {
