@@ -14,6 +14,7 @@ function App() {
     quizType: "",
     quizSize: 0,
     currentMode: "country10",
+    displayName: "全体モード(10問)",
   };
   const modeReducer = (state, action) => {
     switch (action) {
@@ -23,6 +24,7 @@ function App() {
           quizType: "imgSingle",
           quizSize: 10,
           currentMode: "single10",
+          displayName: "一部モード(10問)",
         };
       case "single47":
         return {
@@ -30,6 +32,7 @@ function App() {
           quizType: "imgSingle",
           quizSize: 47,
           currentMode: "single47",
+          displayName: "一部モード(47問)",
         };
       case "country10":
         return {
@@ -37,6 +40,7 @@ function App() {
           quizType: "imgCountry",
           quizSize: 10,
           currentMode: "country10",
+          displayName: "全体モード(10問)",
         };
       case "country47":
         return {
@@ -44,6 +48,7 @@ function App() {
           quizType: "imgCountry",
           quizSize: 47,
           currentMode: "country47",
+          displayName: "全体モード(47問)",
         };
       default:
         return state;
@@ -60,7 +65,7 @@ function App() {
       {isStarted ? (
         <Quiz quizState={quizState} />
       ) : (
-        <Title dispatch={dispatch} />
+        <Title dispatch={dispatch} quizState={quizState} />
       )}
     </Center>
   );

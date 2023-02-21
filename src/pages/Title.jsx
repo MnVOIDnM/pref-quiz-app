@@ -14,14 +14,36 @@ import coverImage from "../images/japanIllust.png";
 import ModeSelectButton from "../components/title/ModeSelectButton";
 import Header from "../components/Header";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { isKanaState, kanaTypeState } from "../recoil_state";
+import { isKanaState, kanaTypeState, userDataState } from "../recoil_state";
 import RankingModal from "../components/title/RankingModal";
+import { collection, orderBy, query, limit, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
-const Title = React.memo(({ dispatch }) => {
+const Title = React.memo(({ dispatch, quizState }) => {
   const [isKana, setIsKana] = useRecoilState(isKanaState);
   const setKanaType = useSetRecoilState(kanaTypeState);
+  const setUserData = useSetRecoilState(userDataState);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const q = query(
+    collection(db, quizState.currentMode),
+    orderBy("score", "desc"),
+    limit(50)
+  );
+  const getRanking = async (query) => {
+    const querySnapshot = await getDocs(query);
+    const dataWithID = querySnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setUserData(dataWithID);
+  };
+
+  const onClickRanking = () => {
+    getRanking(q);
+    onOpen();
+  };
 
   const onChange = () => {
     setIsKana((prev) => !prev);
@@ -63,10 +85,14 @@ const Title = React.memo(({ dispatch }) => {
               onChange={onChange}
             />
           </FormControl>
-          <Button colorScheme="red" onClick={onOpen}>
+          <Button colorScheme="red" onClick={onClickRanking}>
             ランキング
           </Button>
-          <RankingModal disclosure={{ isOpen, onClose }} />
+          <RankingModal
+            disclosure={{ isOpen, onClose }}
+            quizState={quizState}
+            getRanking={getRanking}
+          />
         </VStack>
         <ModeSelectButton dispatch={dispatch} />
       </HStack>

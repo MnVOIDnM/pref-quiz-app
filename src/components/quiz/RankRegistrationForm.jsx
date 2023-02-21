@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   collection,
   setDoc,
@@ -17,6 +17,45 @@ const RankRegistrationForm = ({ quizState, score }) => {
   const userId = useRecoilValue(userIdState);
 
   const isNicknameError = nickname === "";
+  const ngWords = [
+    "うんこ",
+    "死",
+    "きも",
+    "ばか",
+    "かす",
+    "ごみ",
+    "バカ",
+    "カス",
+    "ゴミ",
+    "殺",
+    "くず",
+    "ブス",
+    "あほ",
+    "アホ",
+    "ちんこ",
+    "チンコ",
+    "まんこ",
+    "マンコ",
+    "くそ",
+    "クソ",
+    "エロ",
+    "えっち",
+    "しっこ",
+    "おっぱい",
+    "ばか",
+  ];
+  const [isInappropriateNickname, setIsInappropriateNickname] = useState(false);
+
+  useEffect(() => {
+    const checkInappropriateNickname = () => {
+      ngWords.forEach((value) => {
+        if (nickname.indexOf(value) != -1) {
+          setIsInappropriateNickname(true);
+        }
+      });
+    };
+    checkInappropriateNickname();
+  }, [nickname]);
 
   const registerRank = (e) => {
     e.preventDefault();
@@ -41,23 +80,31 @@ const RankRegistrationForm = ({ quizState, score }) => {
     setShowingRegistrationForm(false);
   };
 
+  const onChange = (e) => {
+    setIsInappropriateNickname(false);
+    setNickname(e.target.value);
+  };
+
   return (
     <>
       {showingRegistrationForm && (
-        <FormControl isInvalid={isNicknameError}>
+        <FormControl isInvalid={isNicknameError || isInappropriateNickname}>
           {isNicknameError && (
             <FormErrorMessage>ニックネームを入れてね</FormErrorMessage>
+          )}
+          {isInappropriateNickname && (
+            <FormErrorMessage>ちがう名前にしてね</FormErrorMessage>
           )}
           <Input
             placeholder="ニックネーム"
             value={nickname}
             type="text"
             maxLength={10}
-            onChange={(e) => setNickname(e.target.value)}
+            onChange={onChange}
           />
           <Button
             colorScheme="red"
-            isDisabled={isNicknameError}
+            isDisabled={isNicknameError || isInappropriateNickname}
             onClick={registerRank}
           >
             ランキングにとうろく
