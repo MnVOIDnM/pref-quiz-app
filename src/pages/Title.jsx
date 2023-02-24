@@ -9,7 +9,7 @@ import {
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import coverImage from "../images/japanIllust.png";
 import ModeSelectButton from "../components/title/ModeSelectButton";
 import Header from "../components/Header";
@@ -25,11 +25,14 @@ const Title = React.memo(({ dispatch, quizState }) => {
   const setUserData = useSetRecoilState(userDataState);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  useEffect(() => {
+    console.log("called just once");
+  }, []);
 
   const q = query(
     collection(db, quizState.currentMode),
     orderBy("score", "desc"),
-    limit(50)
+    limit(15)
   );
   const getRanking = async (query) => {
     const querySnapshot = await getDocs(query);

@@ -43,6 +43,7 @@ const RankRegistrationForm = ({ quizState, score }) => {
     "しっこ",
     "おっぱい",
     "ばか",
+    "💩",
   ];
   const [isInappropriateNickname, setIsInappropriateNickname] = useState(false);
 
