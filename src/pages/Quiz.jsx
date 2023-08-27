@@ -43,7 +43,7 @@ const Quiz = ({ quizState }) => {
     const q = query(
       collection(db, quizState.currentMode),
       orderBy("score", "desc"),
-      limit(0)
+      limit(1)
     );
     const getRanking = async () => {
       const querySnapshot = await getDocs(q);

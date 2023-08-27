@@ -17,34 +17,7 @@ const RankRegistrationForm = ({ quizState, score }) => {
   const userId = useRecoilValue(userIdState);
 
   const isNicknameError = nickname === "";
-  const ngWords = [
-    "うんこ",
-    "死",
-    "きも",
-    "ばか",
-    "かす",
-    "ごみ",
-    "バカ",
-    "カス",
-    "ゴミ",
-    "殺",
-    "くず",
-    "ブス",
-    "あほ",
-    "アホ",
-    "ちんこ",
-    "チンコ",
-    "まんこ",
-    "マンコ",
-    "くそ",
-    "クソ",
-    "エロ",
-    "えっち",
-    "しっこ",
-    "おっぱい",
-    "ばか",
-    "💩",
-  ];
+  const ngWords = ["💩"];
   const [isInappropriateNickname, setIsInappropriateNickname] = useState(false);
 
   useEffect(() => {
