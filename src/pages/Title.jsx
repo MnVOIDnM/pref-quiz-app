@@ -12,7 +12,6 @@ import {
 import React, { useEffect } from "react";
 import coverImage from "../images/japanIllust.png";
 import ModeSelectButton from "../components/title/ModeSelectButton";
-import Header from "../components/Header";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { isKanaState, kanaTypeState, userDataState } from "../recoil_state";
 import RankingModal from "../components/title/RankingModal";
