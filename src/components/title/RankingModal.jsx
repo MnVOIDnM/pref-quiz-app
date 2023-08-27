@@ -25,7 +25,7 @@ const RankingModal = ({ disclosure, quizState, getRanking }) => {
     const q = query(
       collection(db, selected),
       orderBy("score", "desc"),
-      limit(5)
+      limit(1)
     );
     getRanking(q);
   }, [selected]);

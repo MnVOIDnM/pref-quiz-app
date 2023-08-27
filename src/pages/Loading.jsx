@@ -6,15 +6,15 @@ const Loading = ({ isLoadingState, setIsStarted }) => {
   const [loadedSingle, setLoadedSingle] = useState();
 
   useEffect(() => {
-    const t0 = performance.now();
+    // const t0 = performance.now();
     const getSingleImage = async () => {
       const single = await import("../images/indexSingle.js");
       console.log(single);
       setIsLoading((flag) => !flag);
     };
     getSingleImage();
-    const t1 = performance.now();
-    console.log(t1 - t0);
+    // const t1 = performance.now();
+    // console.log(t1 - t0);
   }, []);
 
   return (

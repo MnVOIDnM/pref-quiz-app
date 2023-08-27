@@ -25,14 +25,14 @@ const Title = React.memo(({ dispatch, quizState }) => {
   const setUserData = useSetRecoilState(userDataState);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  useEffect(() => {
-    console.log("called just once");
-  }, []);
+  // useEffect(() => {
+  //   console.log("called just once");
+  // }, []);
 
   const q = query(
     collection(db, quizState.currentMode),
     orderBy("score", "desc"),
-    limit(15)
+    limit(1)
   );
   const getRanking = async (query) => {
     const querySnapshot = await getDocs(query);
